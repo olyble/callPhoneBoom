@@ -12,6 +12,7 @@ def boom(phone):
     import time
     from selenium import webdriver
     from selenium.webdriver.common.by import By
+    from selenium.webdriver.chrome.options import Options
 
     address = []
     with open('api.txt', 'r') as file:
@@ -23,6 +24,9 @@ def boom(phone):
     for i, url in enumerate(urls):
         try:
             # 1.创建Chrome浏览器对象，这会在电脑上在打开一个浏览器窗口
+            # chrome_options = Options()
+            # chrome_options.add_argument('--headless')
+            # driver = webdriver.Chrome(chrome_options=chrome_options)
             driver = webdriver.Chrome()
 
             print("启动浏览器，打开Web界面")
