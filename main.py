@@ -24,6 +24,7 @@ def boom(phone):
     for i, url in enumerate(urls):
         try:
             # 1.创建Chrome浏览器对象，这会在电脑上在打开一个浏览器窗口
+            # 无头模式(开启请删掉下面三行注释，然后注释原来的)
             # chrome_options = Options()
             # chrome_options.add_argument('--headless')
             # driver = webdriver.Chrome(chrome_options=chrome_options)
