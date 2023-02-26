@@ -21,29 +21,31 @@ def boom(phone):
 
     # 遍历链接地址
     for i, url in enumerate(urls):
-        # 1.创建Chrome浏览器对象，这会在电脑上在打开一个浏览器窗口
-        driver = webdriver.Chrome()
+        try:
+            # 1.创建Chrome浏览器对象，这会在电脑上在打开一个浏览器窗口
+            driver = webdriver.Chrome()
 
-        print("启动浏览器，打开Web界面")
-        # driver.get("https://www.baidu.com")
-        js = "window.open('" + url + "')"
-        driver.execute_script(js)
+            print("启动浏览器，打开Web界面")
+            # driver.get(url)
+            js = "window.open('" + url + "')"
+            driver.execute_script(js)
 
-        handles = driver.window_handles
-        driver.switch_to.window(handles[-1])
+            handles = driver.window_handles
+            driver.switch_to.window(handles[-1])
 
-        # time.sleep(3)
-        driver.find_element(By.CLASS_NAME, 'pc-icon-leave-tel').click()
-        time.sleep(3)
-        driver.find_element(By.CLASS_NAME, 'leavetel-input').send_keys(phone)
-        time.sleep(3)
-        # driver.find_element(By.CLASS_NAME, 'submit-disabled').click()
-        driver.find_element(By.CLASS_NAME, 'leavetel-callback').click()
+            # time.sleep(3)
+            driver.find_element(By.CLASS_NAME, 'pc-icon-leave-tel').click()
+            time.sleep(3)
+            driver.find_element(By.CLASS_NAME, 'leavetel-input').send_keys(phone)
+            time.sleep(3)
+            # driver.find_element(By.CLASS_NAME, 'submit-disabled').click()
+            driver.find_element(By.CLASS_NAME, 'leavetel-callback').click()
 
-        time.sleep(1)
-        driver.quit()
-        # driver.close()
-
+            time.sleep(1)
+            driver.quit()
+            # driver.close()
+        except Exception as exc:
+            print(exc)  # 如果需要打印出故障原因可以使用本行代码
 
 # 程序主入口
 if __name__ == "__main__":
