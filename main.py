@@ -31,9 +31,9 @@ def boom(phone):
             driver = webdriver.Chrome()
 
             print("启动浏览器，打开Web界面")
-            # driver.get(url)
-            js = "window.open('" + url + "')"
-            driver.execute_script(js)
+            driver.get(url)
+            # js = "window.open('" + url + "')"
+            # driver.execute_script(js)
 
             handles = driver.window_handles
             driver.switch_to.window(handles[-1])
