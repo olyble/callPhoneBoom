@@ -27,8 +27,12 @@ def boom(phone):
             # 无头模式(开启请删掉下面三行注释，然后注释原来的)
             # chrome_options = Options()
             # chrome_options.add_argument('--headless')
-            # driver = webdriver.Chrome(chrome_options=chrome_options)
-            driver = webdriver.Chrome()
+            chrome_options.add_experimental_option('useAutomationExtension', False)
+driver = webdriver.Chrome(options=chrome_options)
+driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {'source': ‘Object.defineProperty(navigator, "webdriver", {get:()=>undefined})'})
+            driver = webdriver.Chrome(chrome_options=chrome_options)
+            # driver = webdriver.Chrome()
+            
 
             print("启动浏览器，打开Web界面")
             driver.get(url)
