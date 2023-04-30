@@ -28,8 +28,8 @@ def boom(phone):
             # chrome_options = Options()
             # chrome_options.add_argument('--headless')
             chrome_options.add_experimental_option('useAutomationExtension', False)
-driver = webdriver.Chrome(options=chrome_options)
-driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {'source': ‘Object.defineProperty(navigator, "webdriver", {get:()=>undefined})'})
+            driver = webdriver.Chrome(options=chrome_options)
+            driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {'source': ‘Object.defineProperty(navigator, "webdriver", {get:()=>undefined})'})
             driver = webdriver.Chrome(chrome_options=chrome_options)
             # driver = webdriver.Chrome()
             
