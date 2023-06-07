@@ -53,6 +53,11 @@
        "driver":webdriver.Firefox(), # 使用的 driver
    }
    ``` -->
+   
+   
+  使用DrissionPage已合并到main2.只用使用set.py设置环境就可以使用
+
+
 
 4. 运行程序
     ```shell script
