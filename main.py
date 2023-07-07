@@ -1,61 +1,85 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import requests
-import ast
+
+from multiprocessing import Process, Queue
+import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+
+def visit_website(url, i, queue,phone):
+    try:
+        driver = webdriver.Chrome()
+        driver.get("https://www.baidu.com/")
+        driver.get(url)
+
+        try:
+            # 等待弹窗出现并点击关闭按钮
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "imlp-component-captcha-close"))).click()
+        except:
+            # 如果弹窗没有出现，就什么都不做
+            pass
+        time.sleep(30)
+        handles = driver.window_handles
+        driver.switch_to.window(handles[-1])
+
+        # driver.find_element(By.CLASS_NAME, 'pc-icon-leave-tel').click()
+        # time.sleep(3)
+        # driver.find_element(By.CLASS_NAME, 'leavetel-input').send_keys(phone)
+        # time.sleep(3)
+        # driver.find_element(By.CLASS_NAME, 'leavetel-callback').click()
+        WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.pc-icon-leave-tel'))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'leavetel-input'))).send_keys(phone)
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'leavetel-callback'))).click()
+
+        time.sleep(1)
+        driver.quit()
+
+        # 将执行结果添加到共享列表
+        queue.put((i, True))
+
+    except Exception as exc:
+        # 如果发生错误，将执行结果添加到共享列表
+        queue.put((i, False))
+
 
 def boom(phone):
     """模仿浏览器，请求api信息"""
-
-    # 1.引入 ActionChains 类
-    from selenium.webdriver.common.action_chains import ActionChains
-    import time
-    from selenium import webdriver
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.chrome.options import Options
-
-    address = []
     with open('api.txt', 'r') as file:
         urls = file.readlines()
         # 计算链接地址条数
         n_urls = len(urls)
 
+    processes = []
+    queue = Queue()
     # 遍历链接地址
     for i, url in enumerate(urls):
-        try:
-            # 1.创建Chrome浏览器对象，这会在电脑上在打开一个浏览器窗口
-            # 无头模式(开启请删掉下面三行注释，然后注释原来的)
-            # chrome_options = Options()
-            # chrome_options.add_argument('--headless')
-            chrome_options.add_experimental_option('useAutomationExtension', False)
-            driver = webdriver.Chrome(options=chrome_options)
-            driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {'source': ‘Object.defineProperty(navigator, "webdriver", {get:()=>undefined})'})
-            driver = webdriver.Chrome(chrome_options=chrome_options)
-            # driver = webdriver.Chrome()
-            
+        processes.append(Process(target=visit_website, args=(url.strip(), i, queue,phone)))
+    # 启动所有线程
+    for p in processes:
+        p.start()
 
-            print("启动浏览器，打开Web界面")
-            driver.get(url)
-            # js = "window.open('" + url + "')"
-            # driver.execute_script(js)
+    # 等待所有线程结束
+    for p in processes:
+        p.join()
+    n = 0
+    while not queue.empty():
+        i, j = queue.get()
+        if j:
+            n += 1
+    print(f"一共成功：{n}/{n_urls}")
 
-            handles = driver.window_handles
-            driver.switch_to.window(handles[-1])
-
-            # time.sleep(3)
-            driver.find_element(By.CLASS_NAME, 'pc-icon-leave-tel').click()
-            time.sleep(3)
-            driver.find_element(By.CLASS_NAME, 'leavetel-input').send_keys(phone)
-            time.sleep(3)
-            # driver.find_element(By.CLASS_NAME, 'submit-disabled').click()
-            driver.find_element(By.CLASS_NAME, 'leavetel-callback').click()
-
-            time.sleep(1)
-            driver.quit()
-            # driver.close()
-        except Exception as exc:
-            print(exc)  # 如果需要打印出故障原因可以使用本行代码
 
 # 程序主入口
 if __name__ == "__main__":
-    boom("phone")
+    # get_cookie()
+    boom("15861353805")
+    boom("17384499266")
+    boom("19962522585")
+    boom("13961823000")
+    boom("15852508777")
