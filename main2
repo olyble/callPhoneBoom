@@ -19,7 +19,7 @@ for i, url in enumerate(urls):
             continue
         isdisplay2 = page.wait.ele_display('.leavetel-input ', timeout=5)
         if isdisplay2:
-            page.ele('.leavetel-input ').input('19962046275')
+            page.ele('.leavetel-input ').input('phone')
             page.ele('.leavetel-callback').click()
         else:
             continue
