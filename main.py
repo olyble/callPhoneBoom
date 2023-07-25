@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-
 from multiprocessing import Process, Queue
 import time
 from selenium.webdriver.support.ui import WebDriverWait
@@ -79,8 +77,6 @@ def boom(phone):
 # 程序主入口
 if __name__ == "__main__":
     # get_cookie()
-    boom("15861353805")
-    boom("17384499266")
-    boom("19962522585")
-    boom("13961823000")
-    boom("15852508777")
+    boom("phone1")
+    boom("phone2")
+
